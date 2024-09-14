@@ -12,13 +12,12 @@ app.interceptors.request.use(
 
 app.interceptors.response.use(
   (res) => res,
-  (err) => {
-    console.log(err);
+  async (err) => {
     const originalConfig = err.config;
     if (err.response.status === 401 && !originalConfig._retry) {
       originalConfig._retry = true;
       try {
-        const { data } = app.get(
+        const { data } = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh-token`,
           { withCredentials: true }
         );

@@ -5,6 +5,9 @@ import Author from "./Author";
 import PostInteraction from "./PostInteraction";
 import { toPersianDigits } from "@/utils/numberFormatter";
 import { getPosts } from "@/services/postServices";
+import { cookies } from "next/headers";
+import setCookieOnReq from "@/utils/setCookieOnReq";
+// import setCookieOnLike from "@/utils/setCookieOnLike";
 
 async function PostList() {
   // await new Promise((res) => setTimeout(() => res(), 2000));
@@ -14,8 +17,10 @@ async function PostList() {
   // const {
   //   data: { message, posts, totalPages },
   // } = await res.json();
-
-  const posts = await getPosts();
+  const cookieStore = cookies();
+  const options = setCookieOnReq(cookieStore);
+  // const optionsLike = setCookieOnLike(cookieStore);
+  const posts = await getPosts(options);
 
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
@@ -43,7 +48,10 @@ async function PostList() {
                 <span>دقیقه</span>
               </div>
             </div>
-            <PostInteraction post={post} />
+            <PostInteraction
+              post={post}
+              // options={optionsLike}
+            />
           </div>
         </div>
       ))}

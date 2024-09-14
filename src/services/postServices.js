@@ -10,9 +10,10 @@ export async function getPostBySlug(slug) {
   return post;
 }
 
-export async function getPosts() {
+export async function getPosts(options) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/post/list`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/post/list`,
+    options
     //   ,{next: { revalidate: 10 },}
   );
   const { data } = await res.json();
@@ -21,6 +22,19 @@ export async function getPosts() {
   return posts;
 }
 
-export async function likePostApi(postId) {
+export async function likePostApi(postId, options) {
   return http.post(`/post/like/${postId}`).then(({ data }) => data.data);
+
+  // const res = await fetch(
+  //   `${process.env.NEXT_PUBLIC_BASE_URL}/post/like/${postId}`,
+  //   options
+  // );
+  // const { data } = await res.json();
+  // const { message } = data || {};
+
+  // return message;
+}
+
+export async function bookmarkPostApi(postId) {
+  return http.post(`/post/bookmark/${postId}`).then(({ data }) => data.data);
 }
