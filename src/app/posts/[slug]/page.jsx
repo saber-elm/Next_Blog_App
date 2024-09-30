@@ -1,6 +1,8 @@
-import { getPostBySlug, getPosts } from "@/services/postServices";
+import { getPostById, getPostBySlug, getPosts } from "@/services/postServices";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import RelatedPost from "../_components/RelatedPost";
+import PostComment from "../_components/comments/PostComment";
 
 export const dynamicParams = false;
 
@@ -40,6 +42,8 @@ async function SinglePost({ params }) {
   // const { post } = data || {};
 
   const post = await getPostBySlug(params.slug);
+  const { related } = post;
+  console.log(related);
 
   if (!post) notFound();
 
@@ -60,12 +64,13 @@ async function SinglePost({ params }) {
           alt={post.text}
         />
       </div>
-      {post.related.length > 0 ? "hast" : null}
+      {post.related.length > 0 && <RelatedPost posts={post.related} />}
       {post.comments.length > 0
         ? post.comments.map((comment) => (
             <span key={comment._id}>{comment.content.text}</span>
           ))
         : null}
+      <PostComment post={post} />
     </div>
   );
 }

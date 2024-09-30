@@ -10,15 +10,21 @@ export async function getPostBySlug(slug) {
   return post;
 }
 
-export async function getPosts(options) {
+export async function getPostById(id) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/${id}`);
+  const { data } = await res.json();
+  const { post } = data || {};
+
+  return post;
+}
+
+export async function getPosts(queries, options) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/post/list`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/post/list?${queries}`,
     options
-    //   ,{next: { revalidate: 10 },}
   );
   const { data } = await res.json();
   const { posts } = data || {};
-
   return posts;
 }
 

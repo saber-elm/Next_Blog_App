@@ -1,26 +1,37 @@
-import { Suspense } from "react";
-import Loading from "../loading";
+// import { Suspense } from "react";
+// import Loading from "../loading";
+import { cookies } from "next/headers";
 import PostList from "../_components/PostList";
+import setCookieOnReq from "@/utils/setCookieOnReq";
+import { getPosts } from "@/services/postServices";
+import queryString from "query-string";
+import Search from "@/ui/Search";
 
-export const revalidate = 15;
-export const experimental_ppr = true;
+// export const revalidate = 15;
+// export const experimental_ppr = true;
+// export const dynamic = "force-dynamic";
 
-async function BlogPage() {
+async function BlogPage({ searchParams }) {
+  const queries = queryString.stringify(searchParams);
+  const cookieStore = cookies();
+  const options = setCookieOnReq(cookieStore);
+  const posts = await getPosts(queries, options);
+  const { q } = searchParams;
+
   return (
-    <div className="">
-      <h1>لیست پست ها</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Non hic
-        assumenda odio molestiae sint et accusantium quibusdam reiciendis
-        tenetur recusandae enim aut ab aperiam quidem totam optio modi minus
-        fugit a saepe, magnam voluptatem sequi suscipit nam! Optio neque
-        excepturi deserunt, labore magnam incidunt impedit fugit, ipsa autem
-        ipsum repudiandae voluptate explicabo. Odio optio voluptates esse dolor
-        doloremque tempore perferendis.
-      </p>
-      <Suspense fallback={<Loading />}>
-        <PostList />
-      </Suspense>
+    <div>
+      {posts.length > 0 ? (
+        <h1 className="mb-8 text-lg text-secondary-700">لیست پست ها</h1>
+      ) : (
+        <p className="text-lg text-secondary-700">
+          پستی با توجه به عبارت{" "}
+          {<span className="font-bold">&quot;{q}&quot;</span>} یافت نشد!
+        </p>
+      )}
+
+      {/* <Suspense fallback={<Loading />}> */}
+      <PostList posts={posts} />
+      {/* </Suspense> */}
     </div>
   );
 }

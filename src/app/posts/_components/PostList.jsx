@@ -4,23 +4,22 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import Author from "./Author";
 import PostInteraction from "./PostInteraction";
 import { toPersianDigits } from "@/utils/numberFormatter";
-import { getPosts } from "@/services/postServices";
-import { cookies } from "next/headers";
-import setCookieOnReq from "@/utils/setCookieOnReq";
+// import { getPosts } from "@/services/postServices";
+// import { cookies } from "next/headers";
+// import setCookieOnReq from "@/utils/setCookieOnReq";
 // import setCookieOnLike from "@/utils/setCookieOnLike";
 
-async function PostList() {
+async function PostList({ posts }) {
   // await new Promise((res) => setTimeout(() => res(), 2000));
 
   // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list`);
-
   // const {
   //   data: { message, posts, totalPages },
   // } = await res.json();
-  const cookieStore = cookies();
-  const options = setCookieOnReq(cookieStore);
+  // const cookieStore = cookies();
+  // const options = setCookieOnReq(cookieStore);
+  // const posts = await getPosts(options);
   // const optionsLike = setCookieOnLike(cookieStore);
-  const posts = await getPosts(options);
 
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
